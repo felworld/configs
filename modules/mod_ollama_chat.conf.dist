@@ -470,6 +470,39 @@ OllamaChat.ChatHistoryLineTemplate = "{player_name} said: {player_message}\nYou 
 #   Placeholders (named): {player_name} {player_message}
 OllamaChat.ChatHistoryFooterTemplate = "NEW MESSAGE from {player_name}: {player_message}"
 
+# OllamaChat.EnableChannelHistory
+#     Description: When enabled (1), a bot replying in a shared "room" (a custom/general
+#                  channel, party/raid group, or guild/officer chat) is given the recent
+#                  conversation from EVERYONE in that room, instead of only its own 1:1
+#                  message history with the current speaker. This gives bots the full
+#                  context of the channel they are posting into. Whisper, say and yell
+#                  always use the per-(bot,player) history regardless of this setting.
+#     Default:     1 (true)
+OllamaChat.EnableChannelHistory = 1
+
+# OllamaChat.MaxChannelHistory
+#     Description: Maximum number of recent messages to retain per shared room. This
+#                  transcript is kept in memory only (it is not saved to the database).
+#     Default:     20
+OllamaChat.MaxChannelHistory = 20
+
+# OllamaChat.ChannelHistoryHeaderTemplate
+#   Description: Text placed before the shared-room transcript.
+#   Placeholders (named): {player_name}
+OllamaChat.ChannelHistoryHeaderTemplate = "Recent conversation in this channel (most recent last). Use only for context; reply to the new message.\n"
+
+# OllamaChat.ChannelHistoryLineTemplate
+#   Description: Format for each line of the shared-room transcript. Each entry is one
+#                message from a participant (a real player or a bot).
+#   Placeholders (named): {speaker_name} {message}
+OllamaChat.ChannelHistoryLineTemplate = "{speaker_name}: {message}\n"
+
+# OllamaChat.ChannelHistoryFooterTemplate
+#   Description: Text placed after the shared-room transcript. Empty by default because
+#                the main chat prompt already presents the new message separately.
+#   Placeholders (named): {player_name} {player_message}
+OllamaChat.ChannelHistoryFooterTemplate = ""
+
 # OllamaChat.ChatBotSnapshotTemplate
 #   Description: The template string for the context snapshot of the bot's surroundings and status.
 #   Placeholders (named): {combat} {group} {spells} {quests} {los} {players}
