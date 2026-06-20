@@ -278,7 +278,7 @@ OllamaChat.RandomChatterMaxBotsPerPlayer = 2
 #   Description: The template string for random bot chatter prompts.
 #   Placeholders (named): {bot_name} {bot_level} {bot_class} {bot_race} {bot_gender} {bot_role} {bot_faction} {bot_area} {bot_zone} {bot_map} {bot_personality} {bot_personality_name} {environment_info}
 #   Note: {bot_personality_name} contains the name/key of the personality (e.g., "grumpy", "helpful"), while {bot_personality} contains the full personality description text.
-OllamaChat.RandomChatterPromptTemplate = "You are a Wrath-era WoW player. Name: {bot_name}, Level: {bot_level} {bot_class}, {bot_race} {bot_gender}, Spec: {bot_role}, Faction: {bot_faction}. Location: {bot_area}, Zone: {bot_zone}, Map: {bot_map}. MAKE SURE YOU RESPOND USING YOUR PERSONALITY, WHICH IS: {bot_personality_name}: {bot_personality}. {environment_info} Reply casually in under 15 words. No quotes, markdown, symbols, or emojis. Use real WoW slang. Avoid uncommon jargon or formatting."
+OllamaChat.RandomChatterPromptTemplate = "You are a Wrath-era WoW player. Name: {bot_name}, Level: {bot_level} {bot_class}, {bot_race} {bot_gender}, Spec: {bot_role}, Faction: {bot_faction}. Location: {bot_area}, Zone: {bot_zone}, Map: {bot_map}. MAKE SURE YOU RESPOND USING YOUR PERSONALITY, WHICH IS: {bot_personality_name}: {bot_personality}. {environment_info} This is unprompted idle chatter: mutter about what you are doing, your mood, a gripe, or a reaction to your surroundings. Never give advice, tips, strategy, or instructions to anyone, and never explain how to play the game. Reply casually in under 15 words. No quotes, markdown, symbols, or emojis. Use real WoW slang. Avoid uncommon jargon or formatting."
 
 # OllamaChat.RandomChatterPromptVariations
 #   Description: Pipe-separated (|) list of additional prompt instructions that will be randomly selected and appended to the RandomChatterPromptTemplate.
@@ -336,6 +336,49 @@ OllamaChat.EventChatterMaxBotsPerPlayer = 2
 #     Placeholders (named): {bot_name} {bot_level} {bot_class} {bot_race} {bot_gender} {bot_role} {bot_faction} {bot_area} {bot_zone} {bot_map} {bot_personality} {bot_personality_name} {event_type} {event_detail} {actor_name} {sentiment_info}
 #     Note: {bot_personality_name} contains the name/key of the personality (e.g., "grumpy", "helpful"), while {bot_personality} contains the full personality description text.
 OllamaChat.EventChatterPromptTemplate = "You are {bot_name}, a level {bot_level} {bot_class} ({bot_race} {bot_gender}) specializing as a {bot_role} from the {bot_faction} faction. You are currently in {bot_area}, Zone: {bot_zone}, Map: {bot_map}. Personality: {bot_personality_name}: {bot_personality}. {sentiment_info} Event: {actor_name} {event_type} {event_detail}. Respond to this specific Event that just happened in character, casually, in under 15 words. Avoid emojis, markdown, or narration."
+
+# --------------------------------------------
+# STARTUP WARMUP
+# --------------------------------------------
+
+# OllamaChat.WarmupOnStartup
+#     Description: When enabled (1), the module sends one priming query to the
+#                  Ollama model at startup and withholds all proactive chatter
+#                  (random, event, and emote reactions) until the model has
+#                  responded. This avoids a freshly started server firing dozens
+#                  of bot queries at a cold, still-loading model at once.
+#                  Reactive replies (when a player addresses a bot) are NOT
+#                  gated; such a query simply doubles as the warmup.
+#     Default:     1 (true)
+OllamaChat.WarmupOnStartup = 1
+
+# --------------------------------------------
+# EMOTE REACTIONS
+# --------------------------------------------
+
+# OllamaChat.EnableEmoteReactions
+#     Description: When enabled (1), bots react via the LLM when a real player
+#                  performs a text emote (e.g. /wave, /flirt, /salute).
+#     Default:     1 (true)
+OllamaChat.EnableEmoteReactions = 1
+
+# OllamaChat.EmoteReactionChance
+#     Description: Percent chance a bot reacts when the emote is aimed directly
+#                  at it (the player had the bot targeted).
+#     Default:     100
+OllamaChat.EmoteReactionChance = 100
+
+# OllamaChat.EmoteNearbyReactionChance
+#     Description: Percent chance a nearby bot reacts to an emote that was not
+#                  aimed at any bot. One eligible nearby bot is chosen at random.
+#     Default:     10
+OllamaChat.EmoteNearbyReactionChance = 10
+
+# OllamaChat.EmoteReactionDistance
+#     Description: Search radius (yards) for picking a nearby bot to react to an
+#                  untargeted emote.
+#     Default:     20.0
+OllamaChat.EmoteReactionDistance = 20.0
 
 # --------------------------------------------
 # TYPING SIMULATION
@@ -493,7 +536,7 @@ OllamaChat.EnvCommentCreature = You spot a creature named '{creature_name}' and 
 # OllamaChat.EnvCommentGameObject
 #   Description: A pipe-separated (|) list of template messages for when a game object is nearby.
 #   Placeholders (named): {object_name}
-OllamaChat.EnvCommentGameObject = You see {object_name} nearby and comment on its purpose.|You see {object_name} nearby and decide whether to interact.|You see {object_name} nearby and recall why it is useful.|You see {object_name} nearby and judge its condition.|You see {object_name} nearby and consider if it is valuable.|You see {object_name} nearby and explain what it might be used for.|You see {object_name} nearby and react with curiosity.|You see {object_name} nearby and decide whether to investigate.
+OllamaChat.EnvCommentGameObject = You notice {object_name} nearby and mutter about it.|You notice {object_name} nearby and wonder who left it there.|You notice {object_name} nearby and react with curiosity.|You notice {object_name} nearby and comment on how it looks.|You notice {object_name} nearby and say it caught your eye.|You notice {object_name} nearby and grumble that it is in your way.|You notice {object_name} nearby and decide whether to bother with it.|You notice {object_name} nearby and remark you have seen one before.
 
 # OllamaChat.EnvCommentEquippedItem
 #   Description: A pipe-separated (|) list of template messages referencing a random equipped item.
@@ -513,12 +556,12 @@ OllamaChat.EnvCommentBagItemSell = You are trying persuasively to sell {item_cou
 # OllamaChat.EnvCommentSpell
 #   Description: A pipe-separated (|) list of template messages about a random known spell.
 #   Placeholders (named): {spell_name} {spell_effect} {spell_cost}
-OllamaChat.EnvCommentSpell = Discuss possible uses or strategies for '{spell_name}' in the current situation.|Discuss possible uses or strategies for '{spell_name}' against different enemies.|Discuss possible uses or strategies for '{spell_name}' when resources are low.|Discuss possible uses or strategies for '{spell_name}' and its risks.|Discuss possible uses or strategies for '{spell_name}' compared to other spells.|Discuss possible uses or strategies for '{spell_name}' in group combat.|Discuss possible uses or strategies for '{spell_name}' outside of combat.|Discuss possible uses or strategies for '{spell_name}' given its cost of {spell_cost}.
+OllamaChat.EnvCommentSpell = You think about your spell '{spell_name}' and mutter about leaning on it.|You think about your spell '{spell_name}' and gripe that it costs {spell_cost}.|You think about your spell '{spell_name}' and recall a time it saved you.|You think about your spell '{spell_name}' and complain it never crits when you need it.|You think about your spell '{spell_name}' and admit you spam it too much.|You think about your spell '{spell_name}' and grumble about the cooldown.|You think about your spell '{spell_name}' and say how satisfying it is to land.|You think about your spell '{spell_name}' and wonder if you rely on it too much.
 
 # OllamaChat.EnvCommentQuestArea
 #   Description: A pipe-separated (|) list of template messages to suggest an area to quest in.
 #   Placeholders (named): {quest_area}
-OllamaChat.EnvCommentQuestArea = Suggest you could go questing around {quest_area} and explain why.|Suggest you could go questing around {quest_area} based on your level.|Suggest you could go questing around {quest_area} for rewards.|Suggest you could go questing around {quest_area} due to recent rumors.|Suggest you could go questing around {quest_area} to gain experience.|Suggest you could go questing around {quest_area} and note the dangers.|Suggest you could go questing around {quest_area} if prepared.|Suggest you could go questing around {quest_area} and set a goal.
+OllamaChat.EnvCommentQuestArea = You think about heading to {quest_area} and mutter that you might quest there.|You think about heading to {quest_area} and gripe about the travel.|You think about heading to {quest_area} and say you keep putting it off.|You think about heading to {quest_area} and wonder if it is worth your time.|You think about heading to {quest_area} and recall getting lost there before.|You think about heading to {quest_area} and admit you are dreading it.|You think about heading to {quest_area} and say you could use the experience.|You think about heading to {quest_area} and complain it is out of your way.
 
 # OllamaChat.EnvCommentVendor
 #   Description: A pipe-separated (|) list of template messages when a vendor NPC is nearby.
