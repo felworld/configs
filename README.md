@@ -14,7 +14,7 @@ servers read their configs from — edit here, restart the server, done.
 | `authserver.conf` | ac-authserver (login server) |
 | `dbimport.conf` | ac-db-import (database populator) |
 | `modules/playerbots.conf` | mod-playerbots |
-| `modules/mod_ollama_chat.conf` | mod-ollama-chat |
+| `modules/mod_llm.conf` | mod-llm |
 
 ## Conventions
 
@@ -30,7 +30,7 @@ When an upstream `.conf.dist` changes, regenerate the `.conf` with
 re-applies our value overrides onto the fresh template.
 
 One more layer sits on top: Felworld's session-mode env files (`.env.solo` /
-`.env.dumbbots` / `.env.ollama`) set `AC_<OPTION>` environment variables,
+`.env.dumbbots` / `.env.llm`) set `AC_<OPTION>` environment variables,
 which the server reads in preference to the value in these files. Options
-that define a session mode (playerbots on/off, LLM chat on/off, canned
+that define a session mode (playerbots on/off, LLM bots on/off, canned
 chatter) are controlled there; everything else is controlled here.
