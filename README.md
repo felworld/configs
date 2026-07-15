@@ -15,6 +15,7 @@ servers read their configs from — edit here, restart the server, done.
 | `dbimport.conf` | ac-db-import (database populator) |
 | `modules/playerbots.conf` | mod-playerbots |
 | `modules/mod_llm.conf` | mod-llm |
+| `modules/mod_ahbot.conf` | mod-ah-bot-plus (auction house market maker) |
 
 ## Conventions
 
