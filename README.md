@@ -1,8 +1,9 @@
 # Felworld configs
 
-Part of [Felworld](https://github.com/felworld/azerothcore) — an AI-populated,
-(mostly) single-player WoW 3.3.5a world. This repo versions our "best" server
-configs, as determined through playtesting. It is mounted into the Felworld
+Part of [Felworld](https://github.com/felworld/azerothcore) — a tech demo of
+AI "players" (LLM agents + classical game AI) populating and interacting in
+an MMO world. This repo versions our "best" server configs, as determined
+through playtesting. It is mounted into the Felworld
 containers as the `env/dist/etc` submodule, which is exactly where the
 servers read their configs from — edit here, restart the server, done.
 
@@ -35,3 +36,9 @@ One more layer sits on top: Felworld's session-mode env files (`.env.solo` /
 which the server reads in preference to the value in these files. Options
 that define a session mode (playerbots on/off, LLM bots on/off, canned
 chatter) are controlled there; everything else is controlled here.
+
+---
+
+Felworld is a non-commercial research project, not affiliated with or
+endorsed by Blizzard Entertainment — see the
+[project disclaimer](https://github.com/felworld/azerothcore#license-and-disclaimer).
