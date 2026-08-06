@@ -1245,10 +1245,16 @@ AiPlayerbot.WpvpCallouts = 1
 # escalate at all, no matter how many times somebody loses one; a bot with
 # no line of sight on the trouble - a victim who released and left the
 # zone - never shouts about it).
-# The shout is also held entirely while an outclassing defender is in the
-# zone with the ganker - once help has arrived, even a victim's plea would
-# ring false - and frees up again if that defender dies or leaves.
-# The tally resets whenever the ganker dies.
+# "Uncontested" is taken seriously, biased toward "this is handled": any
+# evidence that a capable defender - one within the gank gap of the
+# ganker's level - is on the case cancels the pending shout and resets the
+# tally, which must then be re-earned from zero. Evidence means a kill
+# scored by the defending side in that zone (in a pitched battle both
+# sides score constantly, so neither side's alarm fires) or such a
+# defender arriving to hunt the ganker; the tally also resets whenever the
+# ganker dies. On top of that, each faction shouts about a given zone at
+# most once per EscalationWindow - one battle, one call, however many
+# gankers it contains.
 # Default: 3 / 600
 AiPlayerbot.WpvpEscalationKills = 3
 AiPlayerbot.WpvpEscalationWindow = 600
@@ -1269,6 +1275,15 @@ AiPlayerbot.WpvpDefenseResponseChance = 10
 AiPlayerbot.WpvpDefenseLevelSlack = 3
 AiPlayerbot.WpvpDefenseEvenFightChance = 3
 AiPlayerbot.WpvpGankLevelGap = 5
+
+# Guard respect: a bot never opens or continues a world-PvP fight under the
+# cover of hostile guards that outlevel it by GuardRespectLevelGap or more -
+# it refuses targets standing near such guards and breaks off a chase just
+# before crossing the guard line, instead of running past town guards way
+# above its level and dying to them. Max-level gankers diving a town are
+# unaffected (no guard outlevels them by the gap). 0 disables.
+# Default: 5
+AiPlayerbot.WpvpGuardRespectLevelGap = 5
 
 # Reinforcements: when a tracked ganker dies ReinforcementDeaths times to
 # outside help (killers who were never among their victims - bot defenders
