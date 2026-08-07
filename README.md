@@ -37,6 +37,14 @@ which the server reads in preference to the value in these files. Options
 that define a session mode (playerbots on/off, LLM bots on/off, canned
 chatter) are controlled there; everything else is controlled here.
 
+Observability overrides carried in these files (see the
+[hub FEATURES.md](https://github.com/felworld/azerothcore/blob/main/FEATURES.md#observability)):
+`Metric.InfluxDB.Connection` points at the obs profile's
+`ac-victoriametrics` container (emission itself is toggled per session mode
+via `AC_METRIC_ENABLE`), and the console appenders in `worldserver.conf` /
+`authserver.conf` use flags `6` so every line carries a `LEVEL [category]`
+prefix that the log collector parses into queryable fields.
+
 ---
 
 Felworld is a non-commercial research project, not affiliated with or
