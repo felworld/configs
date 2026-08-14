@@ -344,6 +344,53 @@ AuctionHouseBot.Buyer.PurchaseChanceAtValuePercent = 100
 AuctionHouseBot.Buyer.BidInsteadOfBuyoutChancePercent = 0
 
 ###############################################################################
+#    SIMULATED COMPETING BIDDER
+#
+#    When a player bids on an auction owned by the bots, a rival bot character
+#    can contest it: outbidding after a human-feeling delay, up to a hidden
+#    budget, and sometimes giving up. Without this, a player bid on a
+#    bot-owned auction is a guaranteed win at that price, since nothing else
+#    ever bids on bot auctions. Requires at least 2 characters in
+#    AuctionHouseBot.GUIDs, as the rival is always a different character than
+#    the auction's owner.
+#
+#    AuctionHouseBot.CompetingBidder.ContestChancePercent
+#        The percent chance (0-100), rolled once per auction when a player
+#        first bids on it, that a rival contests the auction at all. The
+#        decision is remembered - an uncontested auction stays uncontested,
+#        and a contested one keeps the same rival for its whole lifetime.
+#    Default: 0 (disabled - players always win bot auctions uncontested)
+#
+#    AuctionHouseBot.CompetingBidder.ResponseDelayInSeconds
+#        How long the rival waits before answering the player's latest bid
+#        with an outbid (by the minimum increment). Value can be a single
+#        number of seconds, or a pair of numbers separated by a ':' for a
+#        random delay between X and Y seconds, re-rolled for each response
+#        (e.g. 180:1500 for 3 to 25 minutes). Bids placed in an auction's
+#        final moments therefore go unanswered - sniping still works.
+#    Default: 0 (respond on the next update cycle, roughly a minute)
+#
+#    AuctionHouseBot.CompetingBidder.MaxPriceModifier
+#        The rival's hidden budget: the same calculated item value the seller
+#        bot uses (including its random variation), multiplied by this value
+#        and rolled once per contested auction. The rival never bids past its
+#        budget and never buys out - once the player bids beyond it, the
+#        rival goes silent and the player wins.
+#    Default: 1
+#
+#    AuctionHouseBot.CompetingBidder.GiveUpChancePercent
+#        The percent chance (0-100), rolled before each response, that the
+#        rival permanently loses interest in the auction, letting the player
+#        win below the rival's budget.
+#    Default: 0 (the rival always bids up to its budget)
+###############################################################################
+
+AuctionHouseBot.CompetingBidder.ContestChancePercent = 0
+AuctionHouseBot.CompetingBidder.ResponseDelayInSeconds = 0
+AuctionHouseBot.CompetingBidder.MaxPriceModifier = 1
+AuctionHouseBot.CompetingBidder.GiveUpChancePercent = 0
+
+###############################################################################
 #    AuctionHouseBot.ListProportion.Category*.Quality*
 #        Determines how many of the listings, proportionally, show up as new auctions
 #		 "0" will mean the item classification never shows up.  Values must be whole numbers.
